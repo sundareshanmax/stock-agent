@@ -50,17 +50,22 @@ def check_news(company):
     feed = feedparser.parse(
         f"https://news.google.com/rss/search?q={company}+stock"
     )
-    sentiments = []
-for e in feed.entries[:5]:
-    try:
-        sentiments.append(TextBlob(e.title).sentiment.polarity)
-    except:
-        sentiments.append(0)
 
-    headlines = [e.title for e in feed.entries[:5]]
+    sentiments = []
+    headlines = []
+
+    for e in feed.entries[:5]:
+        try:
+            sentiments.append(TextBlob(e.title).sentiment.polarity)
+            headlines.append(e.title)
+        except:
+            pass
+
     if not sentiments:
         return None, 0
+
     return headlines[0], sum(sentiments) / len(sentiments)
+
 
 def run_agent():
     global latest_alerts
