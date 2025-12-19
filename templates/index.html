@@ -2,39 +2,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Market Sentinel Dashboard</title>
+<title>Market Sentinel</title>
+<meta http-equiv="refresh" content="60">
+
 <style>
-body { font-family: Arial; background:#f4f6f9; }
-.container {
-    width:700px; margin:40px auto; background:#fff;
-    padding:25px; border-radius:10px;
+body { margin:0; font-family:Segoe UI; background:#0b0f14; color:#e6e6e6; }
+header { background:#10161d; padding:12px 25px; border-bottom:1px solid #222; }
+header h1 { margin:0; color:#00c4ff; font-size:20px; }
+
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr 2fr;
+  gap:15px;
+  padding:15px;
 }
-h2 { text-align:center; }
-.alert {
-    border-left:5px solid #e74c3c;
-    padding:10px;
-    margin-bottom:10px;
-}
+
+.panel { background:#10161d; border:1px solid #222; padding:12px; }
+.panel h2 { font-size:14px; color:#00c4ff; margin-bottom:8px; }
+
+.row { display:flex; justify-content:space-between; font-size:13px; padding:4px 0; }
+.green { color:#3cff7f; }
+.red { color:#ff5c5c; }
+
+.spark { font-size:11px; color:#888; }
+
+.alert { background:#0f1520; border-left:4px solid #ff9800; padding:8px; margin-bottom:8px; font-size:12px; }
+.badge { padding:4px 8px; background:#1c2330; display:inline-block; margin-top:5px; }
+
 </style>
 </head>
-<body>
-<div class="container">
-<h2>Market Sentinel Alerts</h2>
 
-{% if alerts %}
+<body>
+
+<header>
+<h1>📊 Market Sentinel | {{ date }} | {{ summary }}</h1>
+</header>
+
+<div class="grid">
+
+<!-- GAINERS -->
+<div class="panel">
+<h2>📈 Gainers</h2>
+{% for g in gainers %}
+<div class="row">
+<span>{{ g.name }}</span>
+<span class="green">{{ g.change }}%</span>
+</div>
+<div class="spark">{{ g.spark }}</div>
+{% endfor %}
+</div>
+
+<!-- LOSERS -->
+<div class="panel">
+<h2>📉 Losers</h2>
+{% for l in losers %}
+<div class="row">
+<span>{{ l.name }}</span>
+<span class="red">{{ l.change }}%</span>
+</div>
+<div class="spark">{{ l.spark }}</div>
+{% endfor %}
+</div>
+
+<!-- ALERTS -->
+<div class="panel">
+<h2>🚨 Alerts</h2>
 {% for a in alerts %}
 <div class="alert">
-<b>{{ a.company }}</b><br>
-Price Change: {{ a.change }}%<br>
-Sentiment: {{ a.sentiment }}<br>
-News: {{ a.headline }}<br>
-Time: {{ a.time }}
+<b>{{ a.company }}</b> {{ a.change }}%
+<span class="{{ 'red' if a.sentiment=='Negative' else 'green' }}">{{ a.sentiment }}</span><br>
+{{ a.headline }}<br>
+<small>{{ a.time }}</small>
 </div>
 {% endfor %}
-{% else %}
-<p>No alerts yet. Please check back later.</p>
-{% endif %}
+</div>
+
+<!-- WATCHLIST -->
+<div class="panel">
+<h2>⭐ Watchlist</h2>
+{% for w in watchlist %}
+<div class="row">
+<span>{{ w.name }}</span>
+<span class="{{ 'green' if w.change>0 else 'red' }}">{{ w.change }}%</span>
+</div>
+{% endfor %}
+</div>
 
 </div>
+
 </body>
 </html>
