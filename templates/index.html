@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Market Sentinel Dashboard</title>
+<style>
+body { font-family: Arial; background:#f4f6f9; }
+.container {
+    width:700px; margin:40px auto; background:#fff;
+    padding:25px; border-radius:10px;
+}
+h2 { text-align:center; }
+.alert {
+    border-left:5px solid #e74c3c;
+    padding:10px;
+    margin-bottom:10px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Market Sentinel Alerts</h2>
+
+{% if alerts %}
+{% for a in alerts %}
+<div class="alert">
+<b>{{ a.company }}</b><br>
+Price Change: {{ a.change }}%<br>
+Sentiment: {{ a.sentiment }}<br>
+News: {{ a.headline }}<br>
+Time: {{ a.time }}
+</div>
+{% endfor %}
+{% else %}
+<p>No alerts yet. Please check back later.</p>
+{% endif %}
+
+</div>
+</body>
+</html>

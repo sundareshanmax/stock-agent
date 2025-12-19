@@ -1,0 +1,9 @@
+
+services:
+  - type: web
+    name: market-sentinel-web
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python -m textblob.download_corpora
+    startCommand: python app.py
