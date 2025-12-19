@@ -50,7 +50,13 @@ def check_news(company):
     feed = feedparser.parse(
         f"https://news.google.com/rss/search?q={company}+stock"
     )
-    sentiments = [TextBlob(e.title).sentiment.polarity for e in feed.entries[:5]]
+    sentiments = []
+for e in feed.entries[:5]:
+    try:
+        sentiments.append(TextBlob(e.title).sentiment.polarity)
+    except:
+        sentiments.append(0)
+
     headlines = [e.title for e in feed.entries[:5]]
     if not sentiments:
         return None, 0
